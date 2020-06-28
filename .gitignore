@@ -75,3 +75,5 @@ client_secret.json
 /app/mailsync.exe
 /app/mailsync.dSYM
 .idea
+
+docs/

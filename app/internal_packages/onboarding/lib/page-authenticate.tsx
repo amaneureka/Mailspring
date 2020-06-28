@@ -10,37 +10,19 @@ export default class AuthenticatePage extends React.Component {
     account: PropTypes.object,
   };
 
-  _src() {
-    const n1Version = AppEnv.getVersion();
-    return `${MailspringAPIRequest.rootURLForServer(
-      'identity'
-    )}/onboarding?utm_medium=N1&utm_source=OnboardingPage&N1_version=${n1Version}&client_edition=basic`;
-  }
-
-  _onDidFinishLoad = webview => {
-    const receiveUserInfo = `
-      var a = document.querySelector('#identity-result');
-      result = a ? a.innerText : null;
-    `;
-    webview.executeJavaScript(receiveUserInfo, false, result => {
-      this.setState({ ready: true, webviewLoading: false });
-      if (result !== null) {
-        OnboardingActions.identityJSONReceived(JSON.parse(atob(result)));
-      }
-    });
-
-    const openExternalLink = `
-      var el = document.querySelector('.open-external');
-      if (el) {el.addEventListener('click', function(event) {console.log(this.href); event.preventDefault(); return false;})}
-    `;
-    webview.executeJavaScript(openExternalLink);
-  };
-
   render() {
-    return (
-      <div className="page authenticate">
-        <Webview src={this._src()} onDidFinishLoad={this._onDidFinishLoad} />
-      </div>
-    );
+    OnboardingActions.identityJSONReceived({
+      id: '00000000-0000-0000-0000-000000000000',
+      token: '00000000-0000-0000-0000-000000000000',
+      firstName: '',
+      lastName: '',
+      emailAddress: '',
+      object: 'identity',
+      createdAt: '2020-01-01T00:00:00.000Z',
+      stripePlan: 'Basic',
+      stripeCustomerId: '000000000000000000',
+      featureUsage: null
+    });
+    return `data:text/html,<div></div>`;
   }
 }

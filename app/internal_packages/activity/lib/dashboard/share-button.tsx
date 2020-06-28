@@ -60,32 +60,7 @@ export default class ShareButton extends React.Component<{}, { link: string; loa
   }
 
   _onShareReport = async () => {
-    this.setState({
-      loading: true,
-    });
-
-    const link = await MailspringAPIRequest.postStaticPage({
-      key: `activity-${Date.now()}`,
-      html: buildShareHTML(
-        document.querySelector('style[source-path*="activity/styles/index.less"]'),
-        document.querySelector('.activity-dashboard')
-      ),
-    });
-    if (!this._mounted) {
-      return;
-    }
-    this.setState(
-      {
-        loading: false,
-        link: link,
-      },
-      () => {
-        if (this._linkEl) {
-          this._linkEl.setSelectionRange(0, this._linkEl.value.length);
-          this._linkEl.focus();
-        }
-      }
-    );
+    AppEnv.showErrorDialog('share: not supported');
   };
 
   render() {

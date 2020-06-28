@@ -20,8 +20,6 @@ import _ from 'underscore';
 import path from 'path';
 import fs from 'fs';
 
-const { rootURLForServer } = MailspringAPIRequest;
-
 type EventedIFrameProps = {
   searchable?: boolean;
   onResize?: (...args: any[]) => any;
@@ -46,7 +44,7 @@ Section: Component Kit
 */
 export class EventedIFrame extends React.Component<
   EventedIFrameProps & React.HTMLProps<HTMLDivElement>
-> {
+  > {
   static displayName = 'EventedIFrame';
 
   static propTypes = {
@@ -218,16 +216,6 @@ export class EventedIFrame extends React.Component<
 
       e.preventDefault();
 
-      // If this is a link to our billing site, attempt single sign on instead of
-      // just following the link directly
-      if (rawHref.startsWith(rootURLForServer('identity'))) {
-        const path = rawHref.split(rootURLForServer('identity')).pop();
-        IdentityStore.fetchSingleSignOnURL(path, { source: 'SingleSignOnEmail' }).then(href => {
-          AppEnv.windowEventHandler.openLink({ href, metaKey: e.metaKey });
-        });
-        return;
-      }
-
       // It's important to send the raw `href` here instead of the target.
       // The `target` comes from the document context of the iframe, which
       // as of Electron 0.36.9, has different constructor function objects
@@ -354,14 +342,14 @@ export class EventedIFrame extends React.Component<
         new MenuItem({
           label: localized('Save Image') + '...',
           click() {
-            AppEnv.showSaveDialog({ defaultPath: srcFilename }, function(path) {
+            AppEnv.showSaveDialog({ defaultPath: srcFilename }, function (path) {
               if (!path) {
                 return;
               }
               const oReq = new XMLHttpRequest();
               oReq.open('GET', src, true);
               oReq.responseType = 'arraybuffer';
-              oReq.onload = function() {
+              oReq.onload = function () {
                 const buffer = Buffer.from(new Uint8Array(oReq.response));
                 fs.writeFile(path, buffer, err => shell.showItemInFolder(path));
               };
@@ -377,7 +365,7 @@ export class EventedIFrame extends React.Component<
             let img = new Image();
             img.addEventListener(
               'load',
-              function() {
+              function () {
                 const canvas = document.createElement('canvas');
                 canvas.width = img.width;
                 canvas.height = img.height;

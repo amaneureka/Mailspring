@@ -15,7 +15,7 @@ export default class SignaturePhotoPicker extends React.Component<
     isDropping?: boolean;
     isUploading?: boolean;
   }
-> {
+  > {
   static propTypes = {
     id: PropTypes.string,
     data: PropTypes.object,
@@ -126,7 +126,7 @@ export default class SignaturePhotoPicker extends React.Component<
     let link = null;
 
     try {
-      link = await MailspringAPIRequest.postStaticAsset({ filename, blob });
+      throw new Error('not supported');
     } catch (err) {
       AppEnv.showErrorDialog(
         localized(
@@ -213,14 +213,14 @@ export default class SignaturePhotoPicker extends React.Component<
                   {localized('Remove')}
                 </a>
               ) : (
-                <input
-                  type="url"
-                  id="photoURL"
-                  placeholder="http://"
-                  value={data.photoURL === 'custom' ? '' : data.photoURL}
-                  onChange={this.props.onChange}
-                />
-              ))}
+                  <input
+                    type="url"
+                    id="photoURL"
+                    placeholder="http://"
+                    value={data.photoURL === 'custom' ? '' : data.photoURL}
+                    onChange={this.props.onChange}
+                  />
+                ))}
           </div>
         </div>
         <div className="drop-note">{dropNote}</div>

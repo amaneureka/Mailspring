@@ -33,49 +33,7 @@ let IdentityStore = null;
 // server option
 
 export function rootURLForServer(server) {
-  const env = AppEnv.config.get('env');
-
-  if (!['development', 'staging', 'production'].includes(env)) {
-    throw new Error(`rootURLForServer: ${env} is not a valid environment.`);
-  }
-
-  if (server === 'identity') {
-    return {
-      development: 'http://localhost:5101',
-      staging: 'https://id-staging.getmailspring.com',
-      production: 'https://id.getmailspring.com',
-    }[env];
-  }
-  throw new Error('rootURLForServer: You must provide a valid `server` value');
-}
-
-export async function postStaticAsset({ filename, blob }) {
-  const body = new FormData();
-  body.set('filename', filename);
-  if (typeof blob === 'string') {
-    body.set('file', new Blob([blob], { type: 'text/plain' }), filename);
-  } else {
-    body.set('file', blob, filename);
-  }
-  let resp = await makeRequest({
-    server: 'identity',
-    method: 'POST',
-    path: `/api/save-public-asset`,
-    body: body,
-  });
-  return resp.link;
-}
-
-export async function postStaticPage({ html, key }) {
-  const json = await makeRequest({
-    server: 'identity',
-    method: 'POST',
-    path: '/api/share-static-page',
-    json: true,
-    body: { key, html },
-    timeout: 1500,
-  });
-  return json.link;
+  return 'http://fakeurl.com';
 }
 
 export async function makeRequest(options) {
@@ -135,6 +93,4 @@ export default {
   SampleTemporaryErrorCode,
   rootURLForServer,
   makeRequest,
-  postStaticPage,
-  postStaticAsset,
 };
